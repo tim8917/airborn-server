@@ -1,4 +1,4 @@
-const {buildSchema, GraphQLObjectType, GraphQLID, GraphQLString} = require('graphql');
+const {buildSchema} = require('graphql');
 
 const index = buildSchema(`
     type Command {
@@ -9,7 +9,8 @@ const index = buildSchema(`
     
     type Query {
         commands: [Command]
-        command(id: ID!): Command 
+        command(id: ID!): Command
+        sendCommand(command: String): String
     }
     
     type Subscription {

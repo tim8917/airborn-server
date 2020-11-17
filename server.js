@@ -5,12 +5,13 @@ const {createServer} = require('http');
 const {SubscriptionServer} = require('subscriptions-transport-ws');
 const {execute, subscribe} = require('graphql');
 const {GRAPHQL_PATHNAME, WEBSOCKETS_PATHNAME} = require('./constants');
-const {resolvers, pubsub} = require('./resolvers');
+const {resolvers} = require('./resolvers');
 const cors = require('cors');
-const {ClientsManager} = require('./lib/clients-manager');
 
+// Express setup
 const app = express();
-const clientsManager = new ClientsManager(pubsub);
+app.use(cors());
+app.use(express.json());
 
 // GraphQL
 app.use(GRAPHQL_PATHNAME, graphqlHTTP({
@@ -18,18 +19,6 @@ app.use(GRAPHQL_PATHNAME, graphqlHTTP({
     rootValue: resolvers,
     graphiql: true,
 }));
-
-// pure HTTP
-app.use(cors());
-app.use(express.json());
-
-app.use(`/api/http/command`, (req, res) => {
-    const {command} = req.body;
-
-    clientsManager.publishCommand(command);
-
-    res.send({command});
-});
 
 const server = createServer(app);
 

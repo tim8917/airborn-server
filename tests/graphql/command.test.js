@@ -3,7 +3,20 @@ const server = require('../../server');
 
 const request = supertest(server);
 
-test('Command returns multiple items.', async(done) => {
+test('request by operationName.', async(done) => {
+    request
+        .post('/api/ql')
+        .send({
+            query: '{sendCommand(command: "check")}',
+        })
+        .expect(200)
+        .end((err, res) => {
+            expect(res.body.data.sendCommand).toEqual('check');
+            done();
+        });
+});
+
+test('query multiple Commands.', async(done) => {
     request
         .post('/api/ql')
         .send({
@@ -20,7 +33,7 @@ test('Command returns multiple items.', async(done) => {
         });
 });
 
-test('Command returns single item.', async(done) => {
+test('query single Command.', async(done) => {
     request
         .post('/api/ql')
         .send({
