@@ -1,5 +1,5 @@
 const supertest = require('supertest');
-const server = require('../server');
+const server = require('../../server');
 
 const request = supertest(server);
 
@@ -9,7 +9,6 @@ test('Command returns multiple items.', async(done) => {
         .send({
             query: "{ commands {id} }",
         })
-        .set('Accept', 'application/json')
         .expect(200)
         .end((err, res) => {
             if (err) {
@@ -27,7 +26,6 @@ test('Command returns single item.', async(done) => {
         .send({
             query: '{ command(id: "fly"){name} }',
         })
-        .set('Accept', 'application/json')
         .expect(200)
         .end((err, res) => {
             if (err) {
